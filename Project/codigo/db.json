@@ -1,0 +1,108 @@
+{
+  "eventos": [
+    {
+      "id": "ff0c",
+      "nomeEvento": "Calourada",
+      "dataInicio": "2024-10-30T20:30",
+      "dataFim": "2024-10-31T04:00",
+      "participantes": "100",
+      "confirmados": [
+        "2660"
+      ],
+      "cep": "30180110",
+      "rua": "Avenida Olegário Maciel",
+      "cidade": "Belo Horizonte",
+      "bairro": "Centro",
+      "uf": "MG",
+      "preco": " 25,00",
+      "tipo": "1",
+      "usuario": "a1e1",
+      "descricao": "Venha se juntar a nós na festa de calourada dos Pinguins! Uma noite incrível repleta de diversão e energia, onde os novos estudantes são recebidos com bebidas grátis para começar essa jornada universitária da melhor forma possível. Entre na vibe única dos Pinguins e faça novas amizades enquanto aproveita uma atmosfera contagiante. Não perca essa festa inesquecível!"
+    }
+  ],
+  "cadastros": [
+    {
+      "id": "94c7",
+      "nome": {
+        "primeiroNome": "Arthur",
+        "ultimoNome": "Rezende"
+      },
+      "email": "teste@gmail",
+      "senha": "827ccb0eea8a706c4c34a16891f84e7b",
+      "nomeuniversidade": "PUC",
+      "universidadeID": "1234",
+      "TipoUsuario": "organizador",
+      "vinculo": "Aluno",
+      "cpf": "111.111.111-11"
+    },
+    {
+      "id": "71ee",
+      "nome": {
+        "primeiroNome": "Arthur",
+        "ultimoNome": "Rezende"
+      },
+      "email": "arezendealmeida@gmail.com",
+      "senha": "827ccb0eea8a706c4c34a16891f84e7b",
+      "nomeuniversidade": "PUC",
+      "universidadeID": "1234",
+      "TipoUsuario": "participante",
+      "fotoPerfil": ""
+    },
+    {
+      "id": "2660",
+      "nome": {
+        "primeiroNome": "thiago",
+        "ultimoNome": "villani"
+      },
+      "email": "thiago212505@gmail.com",
+      "senha": "d4c5bf13001cb8d529a69b4d79355b65",
+      "nomeuniversidade": "PUC",
+      "universidadeID": "222",
+      "TipoUsuario": "participante",
+      "fotoPerfil": ""
+    },
+    {
+      "id": "a1e1",
+      "nome": {
+        "primeiroNome": "Pinguin",
+        "ultimoNome": ""
+      },
+      "email": "teste@gmail.com",
+      "senha": "d4c5bf13001cb8d529a69b4d79355b65",
+      "nomeuniversidade": "PUC",
+      "universidadeID": "2343",
+      "TipoUsuario": "organizador",
+      "vinculo": "Atletica",
+      "cpf": "123.943.454-34",
+      "fotoPerfil": ""
+    }
+  ],
+  "logado": [
+    {
+      "id": "2660",
+      "nome": {
+        "primeiroNome": "thiago",
+        "ultimoNome": "villani"
+      },
+      "email": "thiago212505@gmail.com",
+      "senha": "d4c5bf13001cb8d529a69b4d79355b65",
+      "nomeuniversidade": "PUC",
+      "universidadeID": "222",
+      "TipoUsuario": "participante",
+      "fotoPerfil": ""
+    }
+  ],
+  "notificacao": [
+    {
+      "id": "b4f2",
+      "lido": [
+        "71ee"
+      ],
+      "mensagem": "O evento \"Palestra\" foi cancelado, logo sua confirmação foi retirada!",
+      "users": [
+        "71ee"
+      ],
+      "data": "02/07/2024"
+    }
+  ]
+}

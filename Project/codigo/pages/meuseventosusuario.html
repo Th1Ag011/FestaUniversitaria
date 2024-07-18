@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- incluindo bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- incluindo o jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- incluindo o bootstrap icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- incluindo lib calendario -->
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+  <!-- incluindo moment.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <!-- incluindo currecy -->
+  <script src="https://cdn.jsdelivr.net/npm/currency.js"></script>
+  <!-- CSS do SweetAlert2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <!-- Scripts do SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="../assets/css/calendar.css">
+  <title>Unifest - MeusEventos - organizador</title>
+</head>
+
+<style>
+  .notification-btn {
+    position: relative;
+  }
+
+  .notification-btn .notification-badge {
+    position: absolute;
+    top: -10px;
+    right: -15px;
+    /* width: 15px;
+      height: 15px; */
+    background-color: red;
+    border-radius: 50%;
+    border: 2px solid white;
+    /* Opcional: borda branca para melhor contraste */
+  }
+
+  .profile-container {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .profile-container i:hover {
+    scale: 1.1;
+    animation-duration: 30s;
+    transition-duration: 0.5s;
+    -o-animation-duration: 1s;
+  }
+</style>
+
+<body id="color">
+
+  <nav class="container d-flex justify-content-center mt-3">
+    <div class="d-flex align-items-center justify-content-start gap-3">
+      <a class="profile-container border border-dark-subtle" style="width: 50px; height: 50px;" href="usuariopage.html">
+        <img id="ftSaldacao" src="https://sistemas.ft.unicamp.br/sgpg/imagens/sem_foto.png" alt="">
+      </a>
+      <p class="m-0 fs-3 text-black">Olá <span class="text-primary" id="usuario"></span></p>
+    </div>
+    <a class="ms-auto text-dark" href="calendario.html">
+
+      <i class="bi bi-house fs-1"></i>
+    </a>
+  </nav>
+
+
+  <div class="container d-flex justify-content-center mt-3 border border-2 rounded p-5 flex-column main">
+    <div class="d-flex justify-content-between w-100 mb-3">
+      <h2>Painel Eventos</h2>
+      <button class="btn rounded-pill btn-primary notification-btn" id="notifica">
+        <i class="bi bi-bell fs-5"></i>
+        <span class="notification-badge d-none px-2" id="noti"></span>
+      </button>
+    </div>
+    <table class="table w-100">
+      <thead>
+        <tr>
+          <th scope="col" class="text-start">Nome do Evento</th>
+          <th scope="col" class="text-center">Data de Início</th>
+          <th scope="col" class="text-center">Data de Encerramento</th>
+          <th scope="col" class="text-center">Endereço</th>
+          <th scope="col" class="text-center">Preço</th>
+          <th scope="col" class="text-end">Tipo</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="modal_notifica" tabindex="-1" aria-labelledby="modal_notificaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal_notificaLabel">Notificações</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="nao-lidas-tab" data-bs-toggle="tab" data-bs-target="#nao-lidas"
+                type="button" role="tab" aria-controls="nao-lidas" aria-selected="true">Não Lidas</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="lidas-tab" data-bs-toggle="tab" data-bs-target="#lidas" type="button"
+                role="tab" aria-controls="lidas" aria-selected="false">Lidas</button>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="nao-lidas" role="tabpanel" aria-labelledby="nao-lidas-tab">
+              <table class="table table-bordered w-100">
+                <thead>
+                  <tr>
+
+
+                    <th scope="col" colspan="2" class="text-center">Mensagem</th>
+                    <th scope="col" class="text-center">Data</th>
+                  </tr>
+                </thead>
+                <tbody id="notificaDados">
+
+                </tbody>
+              </table>
+            </div>
+            <div class="tab-pane fade" id="lidas" role="tabpanel" aria-labelledby="lidas-tab">
+              <table class="table table-bordered w-100">
+                <thead>
+                  <tr>
+
+
+                    <th scope="col" class="text-center">Mensagem</th>
+                    <th scope="col" class="text-center">Data</th>
+                  </tr>
+                </thead>
+                <tbody id="notificaDadosLidos">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" id="ler">Marcar como lida</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--
+
+        incluindo script bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+
+  <script>
+
+    $(document).ready(function () {
+
+      async function buscarUser() {
+        await axios.get(`http://localhost:3000/logado`)
+          .then(function (response) {
+
+            let user = response.data[0]
+            $('#usuario').text(`${user.nome.primeiroNome} ${user.nome.ultimoNome}`)
+
+            const profilePicture = user.fotoPerfil === "" ? "https://sistemas.ft.unicamp.br/sgpg/imagens/sem_foto.png" : user.fotoPerfil;
+
+            $("#ftSaldacao").attr("src", profilePicture);
+            $("#ftPerfil").attr("src", profilePicture);
+
+
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+      }
+
+      buscarUser();
+      function toggleButton() {
+        if ($('#nao-lidas-tab').hasClass('active')) {
+          $('#ler').show();
+        } else {
+          $('#ler').hide();
+        }
+      }
+
+      // Inicializa o estado do botão
+      toggleButton();
+
+      // Adiciona event listeners para os botões das abas
+      $('#nao-lidas-tab').on('click', toggleButton);
+      $('#lidas-tab').on('click', toggleButton);
+      var user = JSON.parse(localStorage.getItem("user"))
+      $('#usuario').text(`${user.nome.primeiroNome} ${user.nome.ultimoNome}`)
+      axios.get(`http://localhost:3000/eventos`)
+        .then(function (response) {
+          let html = ""
+          let eventos = response.data
+          let confirmados = []
+          eventos.forEach(evento => {
+            if (evento.confirmados.includes(user.id)) {
+              confirmados.push(evento)
+            }
+          });
+
+
+
+          confirmados.forEach(evento => {
+            let tipo = ""
+            if (evento.tipo == 1) {
+              tipo = "Festa Universitária"
+            } else {
+              tipo = "Palestra"
+            }
+
+            let valorNumerico
+            if (evento.preco == "") {
+              valorNumerico = 0.00
+            } else {
+              valorNumerico = parseFloat(evento.preco.replace('.', '').replace(',', '.'));
+            }
+
+
+
+            let valorFormatado = valorNumerico.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL'
+            });
+            html += `<tr>
+                                <td>${evento.nomeEvento}</td>
+                                <td class='text-center'>${moment(evento.dataInicio).format("DD/MM/YYYY")}</td>
+                                <td class='text-center'>${moment(evento.dataFim).format("DD/MM/YYYY")}</td>
+                                <td class='text-center'>Rua ${evento.rua} - ${evento.bairro} - ${evento.cidade}</td>
+                                <td class='text-center'>${valorFormatado}</td>
+                                <td class='text-end'>${tipo}</td>
+                            </tr>`
+          })
+          console.log(user)
+          $('#tbody').html(html)
+        })
+
+
+      axios.get('http://localhost:3000/notificacao')
+        .then(response => {
+          const notifica = response.data.filter(notificacao =>
+            notificacao.users.includes(user.id) &&
+            !notificacao.lido.includes(user.id)
+          );
+          console.log(notifica)
+
+          if (notifica.length > 0) {
+            $('#noti').removeClass("d-none")
+
+          }
+          $('#noti').text(notifica.length)
+        })
+        .catch(error => {
+          console.error('Houve um erro ao buscar os dados:', error);
+        });
+
+
+
+      $("#notifica").click(function () {
+        buscanaolidos()
+
+        $("#modal_notifica").modal("show");
+      });
+
+
+      function buscanaolidos() {
+        axios.get("http://localhost:3000/notificacao")
+          .then(function (response) {
+            const notificacoes = response.data.filter(notificacao =>
+              notificacao.users.includes(user.id) &&
+              !notificacao.lido.includes(user.id)
+            );
+            let html = ""
+            if (notificacoes.length > 0) {
+              notificacoes.forEach(notifica => {
+                html += `
+                          <tr>
+                            <td class="text-center"><input class="form-check-input multi_notifica" type="checkbox" value="" id="${notifica.id}"></td>
+                            <td class="text-center">${notifica.mensagem}</td>
+                            <td class="text-center">${notifica.data}</td>
+                          </tr>
+                        `
+
+              })
+              $('#noti').removeClass("d-none")
+            } else {
+              html = `<tr><td colspan="3" class="text-center">Não há notificações não lidas</td></tr>`
+              $('#noti').addClass("d-none")
+            }
+
+            $('#notificaDados').html(html)
+          })
+      }
+
+
+      function buscalidos() {
+        axios.get("http://localhost:3000/notificacao")
+          .then(function (response) {
+            const notificacoes = response.data.filter(notificacao =>
+              notificacao.users.includes(user.id) &&
+              notificacao.lido.includes(user.id)
+            );
+
+            let html = ""
+            if (notificacoes.length > 0) {
+              notificacoes.forEach(notifica => {
+                html += `
+                          <tr>
+                           
+                            <td class="text-center">${notifica.mensagem}</td>
+                            <td class="text-center">${notifica.data}</td>
+                          </tr>
+                        `
+
+              })
+              // $('#noti').removeClass("d-none")
+            } else {
+              html = `<tr><td colspan="2" class="text-center">Não há notificações não lidas</td></tr>`
+              //$('#noti').addClass("d-none")
+            }
+            $('#notificaDadosLidos').html(html)
+          })
+      }
+
+
+
+      $('#ler').click(function () {
+        let notificacoes = []
+        $('.multi_notifica').each(function () {
+          if ($(this).prop('checked') == true) {
+            notificacoes.push($(this).attr('id'))
+          }
+        })
+
+
+        notificacoes.forEach(id => {
+          axios.get(`http://localhost:3000/notificacao?id=${id}`)
+            .then(function (response) {
+              let lidos = response.data.lido || [];
+              lidos.push(user.id);
+
+              axios.patch(`http://localhost:3000/notificacao/${id}`, {
+                lido: lidos
+              })
+                .then(function () {
+                  buscanaolidos();
+                  buscalidos()
+                })
+                .catch(function (error) {
+                  console.error('Erro ao atualizar notificação:', error);
+                });
+
+            })
+            .catch(function (error) {
+              console.error('Erro ao buscar notificação:', error);
+            });
+        });
+
+
+        console.log(notificacoes)
+      })
+
+
+
+
+
+      $('#modal_notifica').off('shown.bs.modal').on('shown.bs.modal', function () {
+        buscanaolidos();
+        buscalidos()
+      });
+
+
+      $('#modal_notifica button[data-bs-toggle="tab"]').off('shown.bs.tab').on('shown.bs.tab', function (e) {
+        buscanaolidos();
+        buscalidos()
+      });
+    })
+
+  </script>
+</body>
+
+</html>

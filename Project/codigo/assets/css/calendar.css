@@ -1,0 +1,110 @@
+#container_calendario{
+    max-height:60rem;
+    max-width: 80%;
+    
+}
+#color{
+    background-color: #fff;
+}
+.fc-col-header {
+    background-color: #4270d4;
+    
+}
+.fc-col-header a {
+    color: #f0f0f0;
+    
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    min-height: 400px; /* Altura mínima para o mapa */
+  }
+  .tab-content {
+    height: 100%; /* Certifique-se de que as abas ocupam 100% da altura */
+  }
+
+.main{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+}
+
+.custom-event{
+    cursor: pointer;
+}
+
+
+a{
+    color: #7f8ba4
+}
+
+.tamanho{
+    width: 50%;
+}
+
+.roxo{
+    background-color: #8A2BE2;
+}
+
+#legenda1{
+    background-color: #8A2BE2;
+    width: 15px;
+    height: 15px;
+    align-self: center;
+}
+#legenda2{
+    background-color: #21a34f;
+    width: 15px;
+    height: 15px;
+    align-self: center;
+}
+
+#festa:hover{
+    background-color: #8A2BE2;
+}
+
+#palestra:hover{
+    background-color: #21a34f;
+
+}
+
+.search{
+    cursor:pointer;
+}
+
+.search:hover{
+    color: #fff;
+}
+
+#searchResults{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    z-index: 100;
+}
+
+@media(max-width: 992px){
+    .tamanho{
+        width: 100%;
+    }
+
+    #container_calendario{
+        max-width: 100%;
+    }
+
+    .calendar-header{
+        flex-direction: column;
+    }
+
+    #lastButton{
+        margin-bottom: 2rem;
+    }
+
+    .main{
+        padding-inline: 5px!important;
+        flex-direction: column;
+    }
+}
